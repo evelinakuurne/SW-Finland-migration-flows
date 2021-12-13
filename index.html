@@ -1,0 +1,1991 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title>Migration patterns and netmigration of Southwest Finland (2015-2020)</title>
+    </head>
+    <body>
+        <center><h1> Migration patterns and netmigration of Southwest Finland (2015-2020)</h1></center>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="data/SuomenKuntajako_2021_10k_1.js"></script>
+        <script src="data/ArrivaltoTurkuin2020_2.js"></script>
+        <script src="data/ArrivaltoTurkuin2015_3.js"></script>
+        <script src="data/Netmigration2020_4.js"></script>
+        <script src="data/Netmigration2019_5.js"></script>
+        <script src="data/Netmigration2018_6.js"></script>
+        <script src="data/Netmigration2017_7.js"></script>
+        <script src="data/Netmigration2016_8.js"></script>
+        <script src="data/Netmigration2015_9.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:5
+        }).fitBounds([[59.58595224055854,14.584828070715774],[63.30414606820342,26.995031047003597]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_GoogleMaps_0');
+        map.getPane('pane_GoogleMaps_0').style.zIndex = 400;
+        var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 5,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_0;
+        map.addLayer(layer_GoogleMaps_0);
+        function pop_SuomenKuntajako_2021_10k_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_SuomenKuntajako_2021_10k_1_0() {
+            return {
+                pane: 'pane_SuomenKuntajako_2021_10k_1',
+                opacity: 1,
+                color: 'rgba(98,84,73,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,0.5450980392156862)',
+                interactive: false,
+            }
+        }
+        map.createPane('pane_SuomenKuntajako_2021_10k_1');
+        map.getPane('pane_SuomenKuntajako_2021_10k_1').style.zIndex = 401;
+        map.getPane('pane_SuomenKuntajako_2021_10k_1').style['mix-blend-mode'] = 'normal';
+        var layer_SuomenKuntajako_2021_10k_1 = new L.geoJson(json_SuomenKuntajako_2021_10k_1, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_SuomenKuntajako_2021_10k_1',
+            layerName: 'layer_SuomenKuntajako_2021_10k_1',
+            pane: 'pane_SuomenKuntajako_2021_10k_1',
+            onEachFeature: pop_SuomenKuntajako_2021_10k_1,
+            style: style_SuomenKuntajako_2021_10k_1_0,
+        });
+        bounds_group.addLayer(layer_SuomenKuntajako_2021_10k_1);
+        map.addLayer(layer_SuomenKuntajako_2021_10k_1);
+        function pop_ArrivaltoTurkuin2020_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ArrivaltoTurkuin2020_2_0(feature) {
+            if (feature.properties['Migr 2020'] >= 11.000000 && feature.properties['Migr 2020'] <= 36.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2020_2',
+                opacity: 1,
+                color: 'rgba(218, 5, 5)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218, 5, 5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2020'] >= 36.000000 && feature.properties['Migr 2020'] <= 136.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2020_2',
+                opacity: 1,
+                color: 'rgba(218, 134, 5)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218, 134, 5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2020'] >= 136.000000 && feature.properties['Migr 2020'] <= 225.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2020_2',
+                opacity: 1,
+                color: 'rgba(252, 214, 2)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252, 214, 2)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2020'] >= 225.000000 && feature.properties['Migr 2020'] <= 776.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2020_2',
+                opacity: 1,
+                color: 'rgba(61, 227, 89)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(61, 227, 89)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2020'] >= 776.000000 && feature.properties['Migr 2020'] <= 1069.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2020_2',
+                opacity: 1,
+                color: 'rgba(31, 110, 133)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31, 110, 133)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_ArrivaltoTurkuin2020_2');
+        map.getPane('pane_ArrivaltoTurkuin2020_2').style.zIndex = 402;
+        map.getPane('pane_ArrivaltoTurkuin2020_2').style['mix-blend-mode'] = 'normal';
+        var layer_ArrivaltoTurkuin2020_2 = new L.geoJson(json_ArrivaltoTurkuin2020_2, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_ArrivaltoTurkuin2020_2',
+            layerName: 'layer_ArrivaltoTurkuin2020_2',
+            pane: 'pane_ArrivaltoTurkuin2020_2',
+            onEachFeature: pop_ArrivaltoTurkuin2020_2,
+            style: style_ArrivaltoTurkuin2020_2_0,
+        });
+        bounds_group.addLayer(layer_ArrivaltoTurkuin2020_2);
+        map.addLayer(layer_ArrivaltoTurkuin2020_2);
+        function pop_ArrivaltoTurkuin2015_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_ArrivaltoTurkuin2015_3_0(feature) {
+            if (feature.properties['Migr 2015'] >= 11.000000 && feature.properties['Migr 2015'] <= 36.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2015_3',
+                opacity: 1,
+                color: 'rgba(218, 5, 5)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218, 5, 5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2015'] >= 36.000000 && feature.properties['Migr 2015'] <= 81.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2015_3',
+                opacity: 1,
+                color: 'rgba(218, 134, 5)',
+                ifill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(218, 134, 5)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2015'] >= 81.000000 && feature.properties['Migr 2015'] <= 146.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2015_3',
+                opacity: 1,
+                color: 'rgba(252, 214, 2)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(252, 214, 2)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2015'] >= 146.000000 && feature.properties['Migr 2015'] <= 217.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2015_3',
+                opacity: 1,
+                color: 'rgba(61, 227, 89)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(61, 227, 89)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['Migr 2015'] >= 217.000000 && feature.properties['Migr 2015'] <= 934.000000 ) {
+                return {
+                pane: 'pane_ArrivaltoTurkuin2015_3',
+                opacity: 1,
+                color: 'rgba(31, 110, 133)',
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31, 110, 133)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_ArrivaltoTurkuin2015_3');
+        map.getPane('pane_ArrivaltoTurkuin2015_3').style.zIndex = 403;
+        map.getPane('pane_ArrivaltoTurkuin2015_3').style['mix-blend-mode'] = 'normal';
+        var layer_ArrivaltoTurkuin2015_3 = new L.geoJson(json_ArrivaltoTurkuin2015_3, {
+            attribution: '',
+            interactive: false,
+            dataVar: 'json_ArrivaltoTurkuin2015_3',
+            layerName: 'layer_ArrivaltoTurkuin2015_3',
+            pane: 'pane_ArrivaltoTurkuin2015_3',
+            onEachFeature: pop_ArrivaltoTurkuin2015_3,
+            style: style_ArrivaltoTurkuin2015_3_0,
+        });
+        bounds_group.addLayer(layer_ArrivaltoTurkuin2015_3);
+        map.addLayer(layer_ArrivaltoTurkuin2015_3);
+        function pop_Netmigration2020_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2020</th>\
+                        <td>' + (feature.properties['2020'] !== null ? autolinker.link(feature.properties['2020'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2020_4_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2020_4rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2020_4rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2020_4',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2020_4');
+        map.getPane('pane_Netmigration2020_4').style.zIndex = 404;
+        map.getPane('pane_Netmigration2020_4').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2020_4 = new L.geoJson(json_Netmigration2020_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2020_4',
+            layerName: 'layer_Netmigration2020_4',
+            pane: 'pane_Netmigration2020_4',
+            onEachFeature: pop_Netmigration2020_4,
+            style: style_Netmigration2020_4_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2020_4);
+        map.addLayer(layer_Netmigration2020_4);
+        function pop_Netmigration2019_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2019</th>\
+                        <td>' + (feature.properties['2019'] !== null ? autolinker.link(feature.properties['2019'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2019_5_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2019_5rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2019_5rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2019_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2019_5');
+        map.getPane('pane_Netmigration2019_5').style.zIndex = 405;
+        map.getPane('pane_Netmigration2019_5').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2019_5 = new L.geoJson(json_Netmigration2019_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2019_5',
+            layerName: 'layer_Netmigration2019_5',
+            pane: 'pane_Netmigration2019_5',
+            onEachFeature: pop_Netmigration2019_5,
+            style: style_Netmigration2019_5_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2019_5);
+        map.addLayer(layer_Netmigration2019_5);
+        function pop_Netmigration2018_6(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2018</th>\
+                        <td>' + (feature.properties['2018'] !== null ? autolinker.link(feature.properties['2018'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2018_6_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2018_6rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2018_6rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2018_6',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2018_6');
+        map.getPane('pane_Netmigration2018_6').style.zIndex = 406;
+        map.getPane('pane_Netmigration2018_6').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2018_6 = new L.geoJson(json_Netmigration2018_6, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2018_6',
+            layerName: 'layer_Netmigration2018_6',
+            pane: 'pane_Netmigration2018_6',
+            onEachFeature: pop_Netmigration2018_6,
+            style: style_Netmigration2018_6_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2018_6);
+        map.addLayer(layer_Netmigration2018_6);
+        function pop_Netmigration2017_7(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2017</th>\
+                        <td>' + (feature.properties['2017'] !== null ? autolinker.link(feature.properties['2017'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2017_7_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2017_7rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2017_7rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2017_7',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2017_7');
+        map.getPane('pane_Netmigration2017_7').style.zIndex = 407;
+        map.getPane('pane_Netmigration2017_7').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2017_7 = new L.geoJson(json_Netmigration2017_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2017_7',
+            layerName: 'layer_Netmigration2017_7',
+            pane: 'pane_Netmigration2017_7',
+            onEachFeature: pop_Netmigration2017_7,
+            style: style_Netmigration2017_7_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2017_7);
+        map.addLayer(layer_Netmigration2017_7);
+        function pop_Netmigration2016_8(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2016</th>\
+                        <td>' + (feature.properties['2016'] !== null ? autolinker.link(feature.properties['2016'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2016_8_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2016_8rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2016_8rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2016_8',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2016_8');
+        map.getPane('pane_Netmigration2016_8').style.zIndex = 408;
+        map.getPane('pane_Netmigration2016_8').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2016_8 = new L.geoJson(json_Netmigration2016_8, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2016_8',
+            layerName: 'layer_Netmigration2016_8',
+            pane: 'pane_Netmigration2016_8',
+            onEachFeature: pop_Netmigration2016_8,
+            style: style_Netmigration2016_8_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2016_8);
+        map.addLayer(layer_Netmigration2016_8);
+        function pop_Netmigration2015_9(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>NAMEFIN</strong><br />' + (feature.properties['NAMEFIN'] !== null ? autolinker.link(feature.properties['NAMEFIN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">2015</th>\
+                        <td>' + (feature.properties['2015'] !== null ? autolinker.link(feature.properties['2015'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+        function style_Netmigration2015_9_0(feature) {
+            var context = {
+                feature: feature,
+                variables: {}
+            };
+            // Start of if blocks and style check logic
+            if (exp_Netmigration2015_9rule0_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(215,25,28,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule1_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,74,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule2_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(237,110,8,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule3_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(248,180,101,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule4_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,202,118,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule5_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,219,191,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule6_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,237,177,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule7_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,111,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule8_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(199,246,146,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule9_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(154,196,57,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule10_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(129,159,110,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule11_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(95,132,135,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule12_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(106,179,174,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule13_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(62,150,180,1.0)',
+                interactive: true,
+            };
+                }
+                else if (exp_Netmigration2015_9rule14_eval_expression(context)) {
+                  return {
+                pane: 'pane_Netmigration2015_9',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(19,122,186,1.0)',
+                interactive: true,
+            };
+                }
+            else {
+                return {fill: false, stroke: false};
+            }
+        }
+        map.createPane('pane_Netmigration2015_9');
+        map.getPane('pane_Netmigration2015_9').style.zIndex = 409;
+        map.getPane('pane_Netmigration2015_9').style['mix-blend-mode'] = 'normal';
+        var layer_Netmigration2015_9 = new L.geoJson(json_Netmigration2015_9, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Netmigration2015_9',
+            layerName: 'layer_Netmigration2015_9',
+            pane: 'pane_Netmigration2015_9',
+            onEachFeature: pop_Netmigration2015_9,
+            style: style_Netmigration2015_9_0,
+        });
+        bounds_group.addLayer(layer_Netmigration2015_9);
+        map.addLayer(layer_Netmigration2015_9);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Netmigration 2015<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_Netmigration2015_9,'Netmigration 2016<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_Netmigration2016_8,'Netmigration 2017<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_Netmigration2017_7,'Netmigration 2018<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_Netmigration2018_6,'Netmigration 2019<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_Netmigration2019_5,'Netmigration 2020<br /><table><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_6005000.png" /></td><td>−600 - −500</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_5004001.png" /></td><td>−500 - −400</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_4003002.png" /></td><td>−400 - −300</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_3002003.png" /></td><td>−300 - −200</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_2001004.png" /></td><td>−200 - −100</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_10005.png" /></td><td>−100 - 0</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_01006.png" /></td><td>0 - 100</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_1002007.png" /></td><td>100 - 200</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_2003008.png" /></td><td>200 - 300</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_3004009.png" /></td><td>300 - 400</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_60070010.png" /></td><td>600 - 700</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_900100011.png" /></td><td>900 - 1000</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_1100120012.png" /></td><td>1100 - 1200</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_1300140013.png" /></td><td>1300 - 1400</td></tr><tr><td style="text-align: center;"><img src="legend/Netmigration2020_4_1500160014.png" /></td><td>1500 - 1600</td></tr></table>': layer_Netmigration2020_4,'Arrival to Turku in 2015<br /><tr><td style="text-align: center;"></td></tr><tr>': layer_ArrivaltoTurkuin2015_3,'Arrival to Turku in 2020<br /><table><tr><td style="text-align: center;"><img src="legend/ArrivaltoTurkuin2020_2_11360.png" /></td><td>11 - 36</td></tr><tr><td style="text-align: center;"><img src="legend/ArrivaltoTurkuin2020_2_361361.png" /></td><td>36 - 136</td></tr><tr><td style="text-align: center;"><img src="legend/ArrivaltoTurkuin2020_2_1362252.png" /></td><td>136 - 225</td></tr><tr><td style="text-align: center;"><img src="legend/ArrivaltoTurkuin2020_2_2257763.png" /></td><td>225 - 776</td></tr><tr><td style="text-align: center;"><img src="legend/ArrivaltoTurkuin2020_2_77610694.png" /></td><td>776 - 1069</td></tr></table>': layer_ArrivaltoTurkuin2020_2,'<img src="legend/SuomenKuntajako_2021_10k_1.png" /> SuomenKuntajako_2021_10k': layer_SuomenKuntajako_2021_10k_1,"Google Maps": layer_GoogleMaps_0,}).addTo(map);L.control.scale({position: 'bottomleft', maxWidth: 100, metric: true, imperial: false, updateWhenIdle: false}).addTo(map);
+        setBounds();
+        resetLabels([layer_SuomenKuntajako_2021_10k_1,layer_Netmigration2020_4,layer_Netmigration2019_5,layer_Netmigration2018_6,layer_Netmigration2017_7,layer_Netmigration2016_8,layer_Netmigration2015_9]);
+        map.on("zoomend", function(){
+            resetLabels([layer_SuomenKuntajako_2021_10k_1,layer_Netmigration2020_4,layer_Netmigration2019_5,layer_Netmigration2018_6,layer_Netmigration2017_7,layer_Netmigration2016_8,layer_Netmigration2015_9]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_SuomenKuntajako_2021_10k_1,layer_Netmigration2020_4,layer_Netmigration2019_5,layer_Netmigration2018_6,layer_Netmigration2017_7,layer_Netmigration2016_8,layer_Netmigration2015_9]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_SuomenKuntajako_2021_10k_1,layer_Netmigration2020_4,layer_Netmigration2019_5,layer_Netmigration2018_6,layer_Netmigration2017_7,layer_Netmigration2016_8,layer_Netmigration2015_9]);
+        });
+        </script>
+    </body>
+</html>
